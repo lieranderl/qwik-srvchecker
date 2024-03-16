@@ -6,7 +6,10 @@ import {
 } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 
+import { ToastStack } from "qwik-toasts";
+
 import "./global.css";
+import { ThemeScript } from "qwik-theme-toggle";
 
 export default component$(() => {
   /**
@@ -22,10 +25,13 @@ export default component$(() => {
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
         <RouterHead />
+        <ThemeScript themeStorageKey="theme" />
       </head>
-      <body lang="en">
-        <RouterOutlet />
-        <ServiceWorkerRegister />
+      <body lang="en" class="font-inter tracking-tight antialiased">
+        <ToastStack>
+          <RouterOutlet />
+          <ServiceWorkerRegister />
+        </ToastStack>
       </body>
     </QwikCityProvider>
   );

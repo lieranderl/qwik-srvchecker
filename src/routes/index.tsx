@@ -1,16 +1,33 @@
 import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import type { ActionStore, JSONValue } from "@builder.io/qwik-city";
+import { routeAction$, type DocumentHead } from "@builder.io/qwik-city";
+import { Domain } from "~/components/domain/domain";
+import { Navbar } from "~/components/navbar/navbar";
+import { Result } from "~/components/result/result";
+
+export const useDomainDiscoverAction = routeAction$(async (domainInput) => {
+  console.log("domain", domainInput);
+  return {
+    success: true,
+    user: domainInput["domain"],
+  };
+});
+
+export type DomainProps = {
+  action: ActionStore<
+    { success: boolean; user: JSONValue },
+    Record<string, unknown>,
+    true
+  >;
+};
 
 export default component$(() => {
+  const action = useDomainDiscoverAction();
   return (
-    <>
-      <h1>Hi 👋</h1>
-      <p>
-        Can't wait to see what you build with qwik!
-        <br />
-        Happy coding.
-      </p>
-    </>
+    <Navbar>
+      <Domain q:slot="domain" action={action} />
+      <Result q:slot="result" action={action} />
+    </Navbar>
   );
 });
 
