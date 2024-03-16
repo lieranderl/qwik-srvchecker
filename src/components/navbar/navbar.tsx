@@ -11,13 +11,13 @@ export const Navbar = component$(() => {
         <div class="navbar sticky top-0 z-10 mx-auto h-4 bg-opacity-50 backdrop-blur-sm">
           <TitleOnToolBar />
           <div class="flex-0 gap-2">
-            <ThemeToggle themeStorageKey="theme" textSize="text-3xl"  />
+            <ThemeToggle themeStorageKey="theme" textSize="text-3xl" />
           </div>
         </div>
         <div class="container mx-auto pt-2">
-        <div class="navbar sticky top-12 z-10 mx-auto h-4 bg-opacity-50 backdrop-blur-sm">
-         <Slot name="domain" />
-        </div>
+          <div class="sticky top-12 z-10 mx-auto flex h-4 items-center justify-center bg-opacity-50 backdrop-blur-sm ">
+            <Slot name="domain" />
+          </div>
           <Slot name="result" />
         </div>
       </div>
