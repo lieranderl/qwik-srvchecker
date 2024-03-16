@@ -7,9 +7,8 @@ import { Result } from "~/components/result/result";
 import type { CheckResult } from "~/models/result";
 
 export const useDomainDiscoverAction = routeAction$(async (domainInput) => {
-  
   function sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   console.log("domain", domainInput);

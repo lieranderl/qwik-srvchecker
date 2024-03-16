@@ -7,14 +7,12 @@ export type ResultProps = {
 export const Result = component$<ResultProps>(({ result }) => {
   return (
     <>
-    <div class="card bg-base-100 w-full shadow">
-      <div class="card-body">
-        <h2 class="card-title">Result:</h2>
-        <p>{result.elapsedTime}</p>
+      <div class="card w-full bg-base-100 shadow">
+        <div class="card-body">
+          <h2 class="card-title">Result:</h2>
+          <p>{result.elapsedTime}</p>
+        </div>
       </div>
-    </div>
-
     </>
-    
   );
 });

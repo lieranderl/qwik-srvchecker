@@ -15,7 +15,7 @@ export const Domain = component$<DomainProps>(({ action }) => {
   const isDomainCorrect = useSignal(true);
   const isEmptyDomain = useSignal(true);
 
-  const handleInputChange = $((event: Event, element: HTMLInputElement) => {
+  const handleInputChange = $((_: Event, element: HTMLInputElement) => {
     const value = element.value;
     if (value === "") {
       isEmptyDomain.value = true;
@@ -42,14 +42,14 @@ export const Domain = component$<DomainProps>(({ action }) => {
             />
           </label>
           <button
-            class="btn btn-sm btn-outline btn-primary w-20"
+            class="btn btn-outline btn-primary btn-sm w-20"
             disabled={
               action.isRunning || !isDomainCorrect.value || isEmptyDomain.value
             }
             type="submit"
           >
             {action.isRunning ? (
-              <span class="loading loading-spin loading-sm"></span>
+              <span class="loading-spin loading loading-sm"></span>
             ) : (
               "Submit"
             )}
@@ -57,7 +57,7 @@ export const Domain = component$<DomainProps>(({ action }) => {
         </div>
 
         {!isDomainCorrect.value && (
-          <div class="text-error text-sm">Input a valid domain name</div>
+          <div class="text-sm text-error">Input a valid domain name</div>
         )}
       </Form>
     </div>
