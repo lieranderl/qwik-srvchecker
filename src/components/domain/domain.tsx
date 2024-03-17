@@ -14,15 +14,9 @@ function isValidDomain(domain: string): boolean {
 export const Domain = component$<DomainProps>(({ action }) => {
   const isDomainCorrect = useSignal(true);
   const isEmptyDomain = useSignal(true);
-
   const handleInputChange = $((_: Event, element: HTMLInputElement) => {
     const value = element.value;
-    if (value === "") {
-      isEmptyDomain.value = true;
-    } else {
-      isEmptyDomain.value = false;
-    }
-
+    value === "" ? (isEmptyDomain.value = true) : (isEmptyDomain.value = false);
     isDomainCorrect.value = isValidDomain(value);
   });
 
@@ -57,7 +51,7 @@ export const Domain = component$<DomainProps>(({ action }) => {
         </div>
 
         {!isDomainCorrect.value && (
-          <div class="text-sm text-error">Input a valid domain name</div>
+          <div class="text-error text-sm">Input a valid domain name</div>
         )}
       </Form>
     </div>
