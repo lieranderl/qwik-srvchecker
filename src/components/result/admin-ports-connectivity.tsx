@@ -7,8 +7,9 @@ export type ConnectivityProps = {
 };
 export const AdminConnectivity = component$<ConnectivityProps>(
   ({ connectivity }) => {
-    const filter_admin = (p: Port)=>p.Proto === "tcp" && p.Type === "admin";
-    const filter_traversal = (p: Port) =>p.Proto === "tcp" && p.Type === "traversal"
+    const filter_admin = (p: Port) => p.Proto === "tcp" && p.Type === "admin";
+    const filter_traversal = (p: Port) =>
+      p.Proto === "tcp" && p.Type === "traversal";
     return (
       <div class="card w-full bg-base-100 shadow">
         <div class="card-body">
@@ -29,7 +30,6 @@ export const AdminConnectivity = component$<ConnectivityProps>(
                   <td>{data.Ip}</td>
                   <ConnectivityPortCell
                     ports={data.Ports.filter(filter_admin)}
-                    
                   />
                   <ConnectivityPortCell
                     ports={data.Ports.filter(filter_traversal)}

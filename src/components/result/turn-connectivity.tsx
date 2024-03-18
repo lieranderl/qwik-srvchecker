@@ -7,12 +7,8 @@ export type ConnectivityProps = {
 };
 export const TurnConnectivity = component$<ConnectivityProps>(
   ({ connectivity }) => {
-    const filterTcp = (p: Port) =>
-      p.Proto === "tcp" &&
-      p.Type === "turn";
-    const filterUdp = (p: Port) =>
-      p.Proto === "udp" &&
-      p.Type === "turn";
+    const filterTcp = (p: Port) => p.Proto === "tcp" && p.Type === "turn";
+    const filterUdp = (p: Port) => p.Proto === "udp" && p.Type === "turn";
     return (
       <div class="card w-full bg-base-100 shadow">
         <div class="card-body">

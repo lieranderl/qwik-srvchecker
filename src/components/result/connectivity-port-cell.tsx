@@ -6,7 +6,6 @@ export type ConPortCellProps = {
 };
 export const ConnectivityPortCell = component$<ConPortCellProps>(
   ({ ports }) => {
-    
     return (
       <td class="flex-nowrap">
         {ports.map((port, portIndex) =>
