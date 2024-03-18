@@ -1,18 +1,20 @@
 import { component$ } from "@builder.io/qwik";
 import type { CheckResult } from "~/models/result";
+import { DiscoveredSrv } from "./discovered-srv";
+import { TcpConnectivity } from "./tcp-connectivity";
+import { AdminConnectivity } from "./admin-ports-connectivity";
+import { TurnConnectivity } from "./turn-connectivity";
 
 export type ResultProps = {
   result: CheckResult;
 };
 export const Result = component$<ResultProps>(({ result }) => {
   return (
-    <>
-      <div class="card w-full bg-base-100 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Result:</h2>
-          <p>{result.elapsedTime}</p>
-        </div>
-      </div>
-    </>
+    <div class="mt-4 flex flex-col gap-4">
+      <DiscoveredSrv srventtries={result.srv} />
+      <TcpConnectivity connectivity={result.connectivity} />
+      <AdminConnectivity connectivity={result.connectivity} />
+      <TurnConnectivity connectivity={result.connectivity} />
+    </div>
   );
 });

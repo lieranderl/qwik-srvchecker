@@ -71,9 +71,12 @@ export default component$(() => {
   return (
     <Navbar>
       <Domain q:slot="domain" action={action} />
-      {action.value && action.value.success && action.value.result != null && (
-        <Result q:slot="result" result={action.value.result} />
-      )}
+      {!action.isRunning &&
+        action.value &&
+        action.value.success &&
+        action.value.result != null && (
+          <Result q:slot="result" result={action.value.result} />
+        )}
       {action.value && !action.value.success && (
         <div q:slot="result" role="alert" class="alert alert-error mt-8">
           <HiXCircleSolid class="text-3xl" />
@@ -85,11 +88,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: "Srv Checker",
   meta: [
     {
       name: "description",
-      content: "Qwik site description",
+      content: "Srv Checker",
     },
   ],
 };

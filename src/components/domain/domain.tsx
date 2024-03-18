@@ -21,39 +21,37 @@ export const Domain = component$<DomainProps>(({ action }) => {
   });
 
   return (
-    <div>
-      <Form action={action}>
-        <div class="flex items-center justify-center gap-2">
-          <label class="input input-sm input-bordered flex items-center gap-2">
-            Domain
-            <input
-              name="domain"
-              type="text"
-              class="grow"
-              placeholder="site.com"
-              onInput$={handleInputChange}
-              disabled={action.isRunning}
-            />
-          </label>
-          <button
-            class="btn btn-outline btn-primary btn-sm w-20"
-            disabled={
-              action.isRunning || !isDomainCorrect.value || isEmptyDomain.value
-            }
-            type="submit"
-          >
-            {action.isRunning ? (
-              <span class="loading-spin loading loading-sm"></span>
-            ) : (
-              "Submit"
-            )}
-          </button>
-        </div>
+    <Form action={action}>
+      <div class="flex items-center justify-center gap-2">
+        <label class="input input-sm input-bordered flex items-center gap-2">
+          Domain
+          <input
+            name="domain"
+            type="text"
+            class="grow"
+            placeholder="site.com"
+            onInput$={handleInputChange}
+            disabled={action.isRunning}
+          />
+        </label>
+        <button
+          class="btn btn-outline btn-primary btn-sm w-20"
+          disabled={
+            action.isRunning || !isDomainCorrect.value || isEmptyDomain.value
+          }
+          type="submit"
+        >
+          {action.isRunning ? (
+            <span class="loading-spin loading loading-sm"></span>
+          ) : (
+            "Submit"
+          )}
+        </button>
+      </div>
 
-        {!isDomainCorrect.value && (
-          <div class="text-error text-sm">Input a valid domain name</div>
-        )}
-      </Form>
-    </div>
+      {!isDomainCorrect.value && (
+        <div class="text-sm text-error">Input a valid domain name</div>
+      )}
+    </Form>
   );
 });

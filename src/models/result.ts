@@ -33,10 +33,10 @@ export type Cert = {
 export type Connectivity = {
   Fqdn: string;
   Ip: string;
-  Ports: Ports[];
+  Ports: Port[];
 };
 
-export type Ports = {
+export type Port = {
   IsOpened: boolean;
   Num: number;
   Proto: string;
