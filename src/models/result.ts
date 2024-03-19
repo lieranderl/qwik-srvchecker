@@ -23,8 +23,8 @@ export type Cert = {
   Cn: string;
   Subject: string;
   San: string;
-  KeyUsage: string[];
-  ExtKeyUsage: string[];
+  KeyUsage: string[] | null;
+  ExtKeyUsage: string[] | null;
   Issuer: string;
   NotBefore: string;
   NotAfter: string;

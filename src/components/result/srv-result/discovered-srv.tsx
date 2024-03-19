@@ -1,5 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import type { SrvEntry } from "~/models/result";
+import { PortCell } from "./port-cell";
+import { CertificateInfo } from "./certificate-info";
 
 interface MergedSrvRecord {
   Srv: string;
@@ -84,7 +86,12 @@ export const SrvTable = component$<SrvProps>(({ srventtries }) => {
                       />
                     </td>
 
-                    <td>null</td>
+                    <td>
+                      <CertificateInfo
+                        certs={record.CertsChain}
+                        ip={record.Ip}
+                      />
+                    </td>
                   </tr>
                 ))}
             </>
@@ -94,45 +101,6 @@ export const SrvTable = component$<SrvProps>(({ srventtries }) => {
     </table>
   );
 });
-
-export type PortProps = {
-  port: number;
-  isopened: boolean;
-  proto: string;
-  type: string;
-  showProto: boolean;
-};
-export const PortCell = component$<PortProps>(
-  ({ port, isopened, proto, type, showProto }) => {
-    let tooltip;
-    let badgeType;
-    if (type === "turn") {
-      tooltip = isopened ? "Port opened" : "Port closed";
-      badgeType = isopened ? "success" : "error";
-    } else {
-      badgeType = proto === "udp" ? "info" : isopened ? "success" : "error";
-      tooltip =
-        proto === "udp"
-          ? "No check for UDP port"
-          : isopened
-            ? "Port opened"
-            : "Port closed";
-    }
-    const myClass = `badge badge-${badgeType} text-base-100 whitespace-nowrap overflow-hidden overflow-ellipsis me-1`;
-
-    return (
-      <div class="tooltip" data-tip={tooltip}>
-        {port === 0 ? (
-          ""
-        ) : (
-          <div class={myClass}>
-            {showProto ? proto.toUpperCase() + " " + port : "" + port}
-          </div>
-        )}
-      </div>
-    );
-  },
-);
 
 export type SrvProps = {
   srventtries: SrvEntry[];

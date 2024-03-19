@@ -28,7 +28,7 @@ export default component$(() => {
         <ThemeScript themeStorageKey="theme" />
       </head>
       <body lang="en" class="font-inter tracking-tight antialiased">
-        <ToastStack>
+        <ToastStack horizontally="toast-end" vertically="toast-top">
           <RouterOutlet />
           <ServiceWorkerRegister />
         </ToastStack>
