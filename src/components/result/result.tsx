@@ -1,4 +1,9 @@
-import { component$, useContext, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  useContext,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import type { CheckResult } from "~/models/result";
 import { DiscoveredSrv } from "./srv-result/discovered-srv";
 import { TcpConnectivity } from "./connectivity/tcp-connectivity";
@@ -12,6 +17,8 @@ export type ResultProps = {
 export const Result = component$<ResultProps>(({ result }) => {
   const toastManager = useContext(ToastManagerContext);
 
+  const srv_filter = useSignal<string>("");
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     toastManager.addToast({
@@ -23,10 +30,48 @@ export const Result = component$<ResultProps>(({ result }) => {
 
   return (
     <div class="mt-4 flex flex-col gap-4">
-      <DiscoveredSrv srventtries={result.srv} />
-      <TcpConnectivity connectivity={result.connectivity} />
-      <AdminConnectivity connectivity={result.connectivity} />
-      <TurnConnectivity connectivity={result.connectivity} />
+      <div>
+        <div class="label">
+          <span class="label-text">Filter by service</span>
+        </div>
+        <select
+          class="select select-bordered select-sm w-full max-w-xs"
+          bind:value={srv_filter}
+        >
+          <option selected value="">
+            All
+          </option>
+          <option value="mra">Mobile and Remote access</option>
+          <option value="b2b">B2B calls</option>
+          <option value="xmpp_fed">XMPP federation</option>
+          <option value="cma">XMPP Client</option>
+          <option value="spark">Spark Hybrid calls</option>
+          <option value="mssip">Microsoft SIP federation</option>
+          <option value="admin">Service ports</option>
+          <option value="turn">TURN services</option>
+        </select>
+      </div>
+
+      {srv_filter.value !== "admin" && srv_filter.value !== "turn" && (
+        <>
+          <DiscoveredSrv
+            srventtries={result.srv}
+            srv_filter={srv_filter.value}
+          />
+          <TcpConnectivity
+            connectivity={result.connectivity}
+            srv_filter={srv_filter.value}
+          />
+        </>
+      )}
+
+      {(srv_filter.value === "" || srv_filter.value === "admin") && (
+        <AdminConnectivity connectivity={result.connectivity} />
+      )}
+
+      {(srv_filter.value === "" || srv_filter.value === "turn") && (
+        <TurnConnectivity connectivity={result.connectivity} />
+      )}
     </div>
   );
 });

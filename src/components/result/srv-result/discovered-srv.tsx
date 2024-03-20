@@ -15,6 +15,7 @@ function mergeSrvRecords(srvRecords: SrvEntry[]): MergedSrvRecord[] {
     if (!recordMap[record.Srv]) {
       recordMap[record.Srv] = [];
     }
+
     if (!recordMap[record.Srv].some((r) => r.Ip === record.Ip)) {
       recordMap[record.Srv].push(record);
     }
@@ -26,7 +27,10 @@ function mergeSrvRecords(srvRecords: SrvEntry[]): MergedSrvRecord[] {
   }));
 }
 
-export const SrvTable = component$<SrvProps>(({ srventtries }) => {
+export type SrvTableProps = {
+  srventtries: SrvEntry[];
+};
+export const SrvTable = component$<SrvTableProps>(({ srventtries }) => {
   const mergedRecords = mergeSrvRecords(srventtries);
   return (
     <table class="table table-pin-rows">
@@ -104,22 +108,25 @@ export const SrvTable = component$<SrvProps>(({ srventtries }) => {
 
 export type SrvProps = {
   srventtries: SrvEntry[];
+  srv_filter: string;
 };
-export const DiscoveredSrv = component$<SrvProps>(({ srventtries }) => {
-  return (
-    <div class="card w-full bg-base-100 shadow">
-      <div class="card-body">
-        <h2 class="card-title">Discovered SRV records</h2>
-        <SrvTable
-          srventtries={srventtries.filter(
-            (srv) =>
-              !(
-                srv.Srv.startsWith("_cisco-uds") ||
-                srv.Srv.startsWith("_cuplogin")
-              ),
-          )}
-        />
+export const DiscoveredSrv = component$<SrvProps>(
+  ({ srventtries, srv_filter }) => {
+    return (
+      <div class="card w-full bg-base-100 shadow">
+        <div class="card-body">
+          <h2 class="card-title">Discovered SRV records</h2>
+          <SrvTable
+            srventtries={srventtries.filter(
+              (srv) =>
+                !(
+                  srv.Srv.startsWith("_cisco-uds") ||
+                  srv.Srv.startsWith("_cuplogin")
+                ) && srv.ServiceName.includes(srv_filter),
+            )}
+          />
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
