@@ -9,7 +9,7 @@ import { HiXCircleSolid } from "@qwikest/icons/heroicons";
 
 export const getUrl = () => {
   if (process.env.NODE_ENV === "production") {
-    return "https://europe-west1-srvchecker-collab.cloudfunctions.net/svrprocess-service";
+    return process.env.API_URL ?? ""
   }
   return "http://127.0.0.1:8080/srv_process";
 };
