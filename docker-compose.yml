@@ -1,0 +1,12 @@
+services:
+  frontend:
+    container_name: qwik-srvchecker
+    image: europe-west1-docker.pkg.dev/srvchecker-collab/srvapp/qwik-srvchecker:latest
+    command: bun run serve
+    build:
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+
+
