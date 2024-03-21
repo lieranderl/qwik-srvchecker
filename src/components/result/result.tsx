@@ -47,6 +47,9 @@ export const Result = component$<ResultProps>(({ result }) => {
           <option value="cma">XMPP Client</option>
           <option value="spark">Spark Hybrid calls</option>
           <option value="mssip">Microsoft SIP federation</option>
+          <option value="webexmessage">Webex Messages</option>
+          <option value="mail">Mail services</option>
+          <option value="ftps">FTPS</option>
           <option value="admin">Service ports</option>
           <option value="turn">TURN services</option>
         </select>
