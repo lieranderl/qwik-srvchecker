@@ -7,7 +7,7 @@ function isValidDomain(domain: string): boolean {
     return true;
   }
   const domainRegex =
-    /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.([A-Za-z]{2,6})(\.[A-Za-z]{2,6})?$/;
+    /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/;
   return domainRegex.test(domain);
 }
 
