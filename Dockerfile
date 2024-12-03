@@ -1,13 +1,13 @@
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM node:20-bookworm-slim as build
+FROM node:20-bookworm-slim AS build
 
 # Setting up the work directory
 WORKDIR /app
 RUN npm install -g bun
 
 # Declaring env
-ENV NODE_ENV production
+ENV NODE_ENV=production
 # COPY package.json
 COPY package.json /app
 # Installing dependencies

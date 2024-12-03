@@ -73,3 +73,8 @@ bun run serve
 ```
 
 Then visit [http://localhost:3000/](http://localhost:3000/)
+
+## Deployment
+```shell
+make build && make push && make deploy
+```
