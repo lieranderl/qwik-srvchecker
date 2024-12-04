@@ -44,3 +44,6 @@ lerna-debug.log*
 functions/server
 functions/node_modules
 .env
+
+# AWS-lambda
+.serverless

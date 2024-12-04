@@ -34,3 +34,8 @@ help:
 	@echo "  make help    - Display this help message"
 	@echo "  make deploy  - Deploy to Google Cloud Run"
 
+
+## deploy to AWS lambda
+deployaws:
+	@echo "Deploying to AWS Lambda..."
+	bun run build && bun run deploy
