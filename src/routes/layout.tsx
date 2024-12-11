@@ -21,7 +21,7 @@ export const getUrl = () => {
 	if (process.env.NODE_ENV === "production") {
 		return process.env.API_URL ?? "";
 	}
-	return "https://europe-west1-srvchecker-collab.cloudfunctions.net/svrprocess-service";
+	return "http://localhost:8000/"
 };
 
 export const useQuery = routeLoader$(({ query }) => {

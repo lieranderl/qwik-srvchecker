@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  serverless-bun-server
+  SAM Template for serverless-bun-server
+
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  QwikBunServerSrvckecker:
+    Type: AWS::Serverless::Function
+    Properties:
+      MemorySize: 256
+      PackageType: Image
+      Architectures:
+        - arm64
+      Environment: # Environment variables for our Lambda function
+        Variables:
+          NODE_ENV: production
+          API_URL: !Ref ApiUrl
+      Events:
+        RootEvent:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: any
+        ProxyEvent:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: any
+    Metadata:
+      DockerTag: !Ref ImageTag
+      DockerContext: ./
+      Dockerfile: Dockerfile
+
+Outputs:
+  QwikBunServerSrvckeckerURL:
+    Description: "API Gateway endpoint URL for Bun"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
+
+Parameters:
+  ApiUrl:
+    Type: String
+  ImageTag:
+    Type: String

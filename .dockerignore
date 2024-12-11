@@ -13,5 +13,6 @@ helm-charts
 .editorconfig
 .idea
 coverage*
+.aws-sam
 
 
