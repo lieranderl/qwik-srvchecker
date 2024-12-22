@@ -5,7 +5,7 @@ export default {
 	content: [
 		"./src/**/*.{js,ts,jsx,tsx,mdx}",
 		"./node_modules/qwik-toasts/**/*.{cjs,mjs}",
-			"./node_modules/qwik-theme-toggle/**/*.{cjs,mjs}",
+		"./node_modules/qwik-theme-toggle/**/*.{cjs,mjs}",
 	],
 	daisyui: {
 		themes: [

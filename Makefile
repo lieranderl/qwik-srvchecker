@@ -16,6 +16,9 @@ build:
 ## deploy to AWS lambda
 deploy:
 	@echo "Deploying to AWS Lambda..."
+	aws sso login --profile $(AWS_PROFILE)
+	bun run build && \
+	aws s3 sync dist/ $(S3_BUCKET) --profile $(AWS_PROFILE)
 	sam build \
 		--parameter-overrides ImageTag=$(TAG) \
 		&& \

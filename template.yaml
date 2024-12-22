@@ -2,21 +2,51 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   serverless-bun-server
-  SAM Template for serverless-bun-server
+  SAM Template for serverless-bun-server with S3 static website hosting and Lambda handling for dynamic requests.
 
 Globals:
   Function:
     Timeout: 10
 
 Resources:
-  QwikBunServerSrvckecker:
+  # S3 Bucket for Static Content
+  StaticFilesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "qwik-srvchecker-static-${AWS::Region}-${AWS::AccountId}"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: false
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: 404.html
+
+  # S3 Bucket Policy for Public Access to Static Files
+  StaticFilesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref StaticFilesBucket
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${StaticFilesBucket.Arn}/*"
+
+  # Lambda Function for Qwik SSR and Dynamic Routes
+  QwikBunServer:
     Type: AWS::Serverless::Function
     Properties:
       MemorySize: 256
       PackageType: Image
       Architectures:
         - arm64
-      Environment: # Environment variables for our Lambda function
+      Environment:
         Variables:
           NODE_ENV: production
           API_URL: !Ref ApiUrl
@@ -35,41 +65,83 @@ Resources:
       DockerTag: !Ref ImageTag
       DockerContext: ./
       Dockerfile: Dockerfile
-      
+
+  # CloudFront Distribution for Static and Dynamic Content
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Origins:
-          - Id: ApiGatewayOrigin
-            DomainName: !Sub "${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+          - Id: "S3bucket-srvchecker"
+            DomainName: !Sub "${StaticFilesBucket}.s3-website-${AWS::Region}.${AWS::URLSuffix}"
             CustomOriginConfig:
-              OriginProtocolPolicy: https-only
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: "http-only"
+            ConnectionAttempts: 3
+            ConnectionTimeout: 10
+          - Id: "LambdaBunOrigin"
+            DomainName: !Sub "${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}"
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: "https-only"
+            ConnectionAttempts: 3
+            ConnectionTimeout: 10
         Enabled: true
         DefaultCacheBehavior:
-          TargetOriginId: ApiGatewayOrigin
-          ViewerProtocolPolicy: redirect-to-https
+          TargetOriginId: "LambdaBunOrigin"
+          ViewerProtocolPolicy: "redirect-to-https"
           AllowedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-            - PUT
-            - POST
-            - PATCH
-            - DELETE
+            - "HEAD"
+            - "DELETE"
+            - "POST"
+            - "GET"
+            - "OPTIONS"
+            - "PUT"
+            - "PATCH"
           CachedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
+            - "HEAD"
+            - "GET"
           ForwardedValues:
             QueryString: true
             Cookies:
-              Forward: none
+              Forward: "none"
+          MinTTL: 0
+          DefaultTTL: 86400
+          MaxTTL: 31536000
+        CacheBehaviors:
+          - PathPattern: "/assets/*"
+            TargetOriginId: "S3bucket-srvchecker"
+            ViewerProtocolPolicy: "redirect-to-https"
+            AllowedMethods:
+              - "HEAD"
+              - "GET"
+            CachedMethods:
+              - "HEAD"
+              - "GET"
+            Compress: true
+            CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
+          - PathPattern: "/build/*"
+            TargetOriginId: "S3bucket-srvchecker"
+            ViewerProtocolPolicy: "redirect-to-https"
+            AllowedMethods:
+              - "HEAD"
+              - "GET"
+            CachedMethods:
+              - "HEAD"
+              - "GET"
+            Compress: true
+            CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
         ViewerCertificate:
           CloudFrontDefaultCertificate: true
 
 Outputs:
-  QwikBunServerSrvckeckerURL:
+  StaticBucketURL:
+    Description: "URL of the S3 bucket hosting static files"
+    Value: !Sub "https://${StaticFilesBucket}.s3.amazonaws.com"
+
+  QwikBunServerURL:
     Description: "API Gateway endpoint URL for Bun"
     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/"
 
@@ -80,5 +152,7 @@ Outputs:
 Parameters:
   ApiUrl:
     Type: String
+    Description: "The service URL for the API that the web application will interact with."
   ImageTag:
     Type: String
+    Description: "The Docker image tag for the Qwik server function"

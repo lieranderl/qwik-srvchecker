@@ -21,7 +21,7 @@ export const getUrl = () => {
 	if (process.env.NODE_ENV === "production") {
 		return process.env.API_URL ?? "";
 	}
-	return "http://localhost:8000/"
+	return "http://localhost:8000/";
 };
 
 export const useQuery = routeLoader$(({ query }) => {

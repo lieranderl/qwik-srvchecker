@@ -23,7 +23,6 @@ COPY --from=build /app/node_modules /var/task/node_modules
 COPY --from=build /app/server /var/task/server
 COPY --from=build /app/dist /var/task/dist
 COPY --from=build /app/package.json /var/task/package.json
-COPY --from=build /app/public /var/task/public
 
 # Exposing server port
 EXPOSE $PORT
